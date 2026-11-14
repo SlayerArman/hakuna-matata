@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://83138jmn2d2l"]
+
+[ext_resource type="Texture2D" uid="uid://b387a30lxo8bh" path="res://assets/intractables/Salt.png" id="1_j1qx7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j1qx7"]
+size = Vector2(137, 206)
+
+[node name="Statue" type="Sprite2D" unique_id=1411461505]
+texture = ExtResource("1_j1qx7")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1152507617]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1681508285]
+position = Vector2(0.5, 13)
+shape = SubResource("RectangleShape2D_j1qx7")
