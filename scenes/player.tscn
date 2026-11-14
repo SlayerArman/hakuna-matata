@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dfp25y488aqbl"]
 
 [ext_resource type="Texture2D" uid="uid://c1g5kkq6oqi2g" path="res://assets/player/idle/idle torso/torso_idle0.png" id="1_3v2ag"]
+[ext_resource type="Script" uid="uid://c80jf3capn3ar" path="res://scripts/player.gd" id="1_gl8cc"]
 [ext_resource type="Texture2D" uid="uid://g6y3mcgjfumu" path="res://assets/player/idle/crouch idle/crouch_idle0.png" id="1_ke2ow"]
 [ext_resource type="Texture2D" uid="uid://f1ntnhm1x5q2" path="res://assets/player/idle/idle torso/torso_idle1.png" id="2_jej6c"]
 [ext_resource type="Texture2D" uid="uid://b6ky4s1fjjejr" path="res://assets/player/idle/crouch idle/crouch_idle1.png" id="2_ujl30"]
@@ -165,12 +166,14 @@ animations = [{
 height = 42.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1439198723]
+script = ExtResource("1_gl8cc")
 
 [node name="Upper Body" type="AnimatedSprite2D" parent="." unique_id=200663086]
 sprite_frames = SubResource("SpriteFrames_u8vuu")
 animation = &"crouch moving"
 autoplay = "idle"
-frame_progress = 0.4934422
+frame = 4
+frame_progress = 0.015050393
 
 [node name="Lower Body" type="AnimatedSprite2D" parent="." unique_id=1335888456]
 visible = false
