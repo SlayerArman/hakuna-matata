@@ -3,9 +3,12 @@
 [ext_resource type="PackedScene" uid="uid://83138jmn2d2l" path="res://scenes/statue.tscn" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://do08kqfjivvmt" path="res://assets/tiles/Tiles.png" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://dfp25y488aqbl" path="res://scenes/player.tscn" id="2_yqjtg"]
+[ext_resource type="Texture2D" uid="uid://bdylvo0my0egc" path="res://assets/background/Background_0.png" id="4_iywne"]
 [ext_resource type="PackedScene" uid="uid://ywotbxccpb47" path="res://scenes/Wild Zombie.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://f6pxp8nk0sck" path="res://scenes/Zombie Man.tscn" id="5_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://c4e2sqilnx6qs" path="res://scenes/Zombie Woman.tscn" id="6_gee14"]
+[ext_resource type="Texture2D" uid="uid://o47u762tw55e" path="res://assets/background/Grass_background_1.png" id="6_p57ef"]
+[ext_resource type="Texture2D" uid="uid://b4h8a1ehsqmb6" path="res://assets/background/Background_1.png" id="8_gee14"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -892,6 +895,40 @@ texture = ExtResource("1_uwrxv")
 sources/1 = SubResource("TileSetAtlasSource_lnu2h")
 
 [node name="Game" type="Node2D" unique_id=801062572]
+
+[node name="Background" type="ParallaxBackground" parent="." unique_id=792419959]
+
+[node name="Sprite2D" type="Sprite2D" parent="Background" unique_id=718458726]
+position = Vector2(0, -30)
+scale = Vector2(2, 2)
+texture = ExtResource("4_iywne")
+centered = false
+region_rect = Rect2(0, 0, 0, 352)
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="Background" unique_id=1848658890]
+position = Vector2(10, 0)
+motion_scale = Vector2(0.25, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ParallaxLayer2" unique_id=576543958]
+texture_repeat = 2
+position = Vector2(-549, 309)
+scale = Vector2(0.5163933, 0.5163933)
+texture = ExtResource("8_gee14")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 9999999, 450)
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="Background" unique_id=1864221694]
+motion_scale = Vector2(0.6, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ParallaxLayer3" unique_id=1822663247]
+texture_repeat = 2
+position = Vector2(-539, 344)
+scale = Vector2(0.48000002, 0.48000002)
+texture = ExtResource("6_p57ef")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 9999999, 450)
 
 [node name="Statue" parent="." unique_id=1411461505 instance=ExtResource("1_lnu2h")]
 z_index = 1

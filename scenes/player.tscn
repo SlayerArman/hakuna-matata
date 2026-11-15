@@ -477,6 +477,8 @@ shape = SubResource("CapsuleShape2D_smehm")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=87298350]
 position = Vector2(2, -40)
 zoom = Vector2(2.5, 2.5)
+limit_left = -350
+position_smoothing_enabled = true
 
 [node name="MuzzleNormal" type="Marker2D" parent="." unique_id=1036489549]
 position = Vector2(20, -8)
