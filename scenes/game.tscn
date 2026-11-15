@@ -3,10 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://83138jmn2d2l" path="res://scenes/statue.tscn" id="1_lnu2h"]
 [ext_resource type="Texture2D" uid="uid://do08kqfjivvmt" path="res://assets/tiles/Tiles.png" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://dfp25y488aqbl" path="res://scenes/player.tscn" id="2_yqjtg"]
-[ext_resource type="Texture2D" uid="uid://bdylvo0my0egc" path="res://assets/background/Background_0.png" id="4_iywne"]
-[ext_resource type="Texture2D" uid="uid://b4h8a1ehsqmb6" path="res://assets/background/Background_1.png" id="4_lbhrr"]
-[ext_resource type="Texture2D" uid="uid://o47u762tw55e" path="res://assets/background/Grass_background_1.png" id="6_p57ef"]
-[ext_resource type="Texture2D" uid="uid://b2e3vjaj85qwl" path="res://assets/background/Grass_background_2.png" id="7_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://ywotbxccpb47" path="res://scenes/Wild Zombie.tscn" id="4_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://ds30py3irb0uu" path="res://scenes/background.tscn" id="5_iywne"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -114,13 +112,20 @@ texture = ExtResource("1_uwrxv")
 19:5/0 = 0
 0:6/0 = 0
 1:6/0 = 0
+1:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:6/0 = 0
+2:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:6/0 = 0
+3:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:6/0 = 0
+4:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:6/0 = 0
 6:6/0 = 0
+6:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 7:6/0 = 0
+7:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 8:6/0 = 0
+8:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 9:6/0 = 0
 10:6/0 = 0
 10:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -895,38 +900,13 @@ z_index = -1
 tile_map_data = PackedByteArray("AAD4/xsAAQAAAA8AAAD4/xwAAQAAABAAAAD4/x0AAQAAABEAAAD4/x4AAQAAABIAAAD4/x8AAQAAABMAAAD5/xsAAQABAA8AAAD5/xwAAQABABAAAAD5/x0AAQABABEAAAD5/x4AAQABABIAAAD5/x8AAQABABMAAAD6/xsAAQACAA8AAAD6/xwAAQACABAAAAD6/x0AAQACABEAAAD6/x4AAQACABIAAAD6/x8AAQACABMAAAD7/xwAAQADABAAAAD7/x0AAQADABEAAAD7/x4AAQADABIAAAD7/x8AAQADABMAAAD0/xsAAQAAAA8AAAD0/xwAAQAAABAAAAD0/x0AAQAAABEAAAD0/x4AAQAAABIAAAD0/x8AAQAAABMAAAD1/xsAAQABAA8AAAD1/xwAAQABABAAAAD1/x0AAQABABEAAAD1/x4AAQABABIAAAD1/x8AAQABABMAAAD2/xsAAQACAA8AAAD2/xwAAQACABAAAAD2/x0AAQACABEAAAD2/x4AAQACABIAAAD2/x8AAQACABMAAAD3/xsAAQADAA8AAAD3/xwAAQADABAAAAD3/x0AAQADABEAAAD3/x4AAQADABIAAAD3/x8AAQADABMAAADw/xsAAQAAAA8AAADw/xwAAQAAABAAAADw/x0AAQAAABEAAADw/x4AAQAAABIAAADw/x8AAQAAABMAAADx/xsAAQABAA8AAADx/xwAAQABABAAAADx/x0AAQABABEAAADx/x4AAQABABIAAADx/x8AAQABABMAAADy/xsAAQACAA8AAADy/xwAAQACABAAAADy/x0AAQACABEAAADy/x4AAQACABIAAADy/x8AAQACABMAAADz/xsAAQADAA8AAADz/xwAAQADABAAAADz/x0AAQADABEAAADz/x4AAQADABIAAADz/x8AAQADABMAAABOABcAAQAAAA8AAABOABgAAQAAABAAAABOABkAAQAAABEAAABOABoAAQAAABIAAABOABsAAQAAABMAAABPABcAAQABAA8AAABPABgAAQABABAAAABPABkAAQABABEAAABPABoAAQABABIAAABPABsAAQABABMAAABQABcAAQAAAA8AAABQABgAAQAAABAAAABQABkAAQAAABEAAABQABoAAQAAABIAAABQABsAAQAAABMAAABRABcAAQABAA8AAABRABgAAQABABAAAABRABkAAQABABEAAABRABoAAQABABIAAABRABsAAQABABMAAABSABcAAQACAA8AAABSABgAAQACABAAAABSABkAAQACABEAAABSABoAAQACABIAAABSABsAAQACABMAAABTABcAAQADAA8AAABTABgAAQADABAAAABTABkAAQADABEAAABTABoAAQADABIAAABTABsAAQADABMAAAARABsAAQAAAA8AAAARABwAAQAAABAAAAARAB0AAQAAABEAAAARAB4AAQAAABIAAAARAB8AAQAAABMAAAASABsAAQABAA8AAAASABwAAQABABAAAAASAB0AAQABABEAAAASAB4AAQABABIAAAASAB8AAQABABMAAAATABsAAQACAA8AAAATABwAAQACABAAAAATAB0AAQACABEAAAATAB4AAQACABIAAAATAB8AAQACABMAAAAUABsAAQAAAA8AAAAUABwAAQAAABAAAAAUAB0AAQAAABEAAAAUAB4AAQAAABIAAAAUAB8AAQAAABMAAAAVABsAAQABAA8AAAAVABwAAQABABAAAAAVAB0AAQABABEAAAAVAB4AAQABABIAAAAVAB8AAQABABMAAAAWABsAAQACAA8AAAAWABwAAQACABAAAAAWAB0AAQACABEAAAAWAB4AAQACABIAAAAWAB8AAQACABMAAAA=")
 tile_set = SubResource("TileSet_yqjtg")
 
-[node name="Background" type="ParallaxBackground" parent="." unique_id=256681924]
+[node name="Zombies" type="Node2D" parent="." unique_id=665196873]
+z_index = 4
 
-[node name="Layer 1" type="Parallax2D" parent="Background" unique_id=633036430]
+[node name="Wild Zombie" parent="Zombies" unique_id=1117136050 instance=ExtResource("4_lbhrr")]
+position = Vector2(62, 483)
 
-[node name="Sprite2D" type="Sprite2D" parent="Background/Layer 1" unique_id=621825593]
-position = Vector2(383, 437.99997)
-scale = Vector2(0.70012015, 0.7001202)
-texture = ExtResource("4_iywne")
+[node name="Wild Zombie2" parent="Zombies" unique_id=915095970 instance=ExtResource("4_lbhrr")]
+position = Vector2(736, 428)
 
-[node name="Layer 2" type="Parallax2D" parent="Background" unique_id=1018324313]
-scroll_scale = Vector2(0.8, 0.8)
-repeat_size = Vector2(300, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="Background/Layer 2" unique_id=1850200542]
-position = Vector2(385.99997, 423)
-scale = Vector2(0.701923, 0.70192313)
-texture = ExtResource("4_lbhrr")
-
-[node name="Layer 3" type="Parallax2D" parent="Background" unique_id=942546235]
-scroll_scale = Vector2(0.5, 0.5)
-repeat_size = Vector2(300, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="Background/Layer 3" unique_id=2131637178]
-position = Vector2(232, 441)
-scale = Vector2(0.6310096, 0.63100964)
-texture = ExtResource("6_p57ef")
-
-[node name="Layer 4" type="Parallax2D" parent="Background" unique_id=154893497]
-scroll_scale = Vector2(0.5, 0.5)
-repeat_size = Vector2(300, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="Background/Layer 4" unique_id=228894725]
-position = Vector2(465, 462)
-scale = Vector2(0.6310096, 0.63100964)
-texture = ExtResource("7_u5sy4")
+[node name="Background" parent="." unique_id=1591827826 instance=ExtResource("5_iywne")]

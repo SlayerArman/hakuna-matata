@@ -1,0 +1,142 @@
+extends CharacterBody2D
+
+@export var speed: float = 120.0
+@export var max_health: int = 100
+@export var attack_damage: int = 30
+@export var attack_range: float = 45.0
+@export var attack_vertical_tolerance: float = 50.0
+
+var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var detection_area: Area2D = $Area2D
+@onready var body_collision: CollisionShape2D = $CollisionShape2D
+@onready var detection_collision: CollisionShape2D = $Area2D/CollisionShape2D
+
+var health: int
+var player: CharacterBody2D = null
+
+var attack_animations: Array[String] = ["attack 1", "attack 2", "attack 3"]
+var current_attack_index: int = 0
+
+var is_attacking: bool = false
+var has_dealt_damage: bool = false
+var is_dead: bool = false
+
+func _ready():
+	health = max_health
+	
+	for anim in ["attack 1", "attack 2", "attack 3", "dead"]:
+		if sprite.sprite_frames.has_animation(anim):
+			sprite.sprite_frames.set_animation_loop(anim, false)
+			
+	for anim in ["idle", "running"]:
+		if sprite.sprite_frames.has_animation(anim):
+			sprite.sprite_frames.set_animation_loop(anim, true)
+
+	detection_area.body_entered.connect(_on_detection_area_body_entered)
+	detection_area.body_exited.connect(_on_detection_area_body_exited)
+	sprite.animation_finished.connect(_on_sprite_animation_finished)
+	sprite.frame_changed.connect(_on_sprite_frame_changed)
+	
+	sprite.play("idle")
+
+func _physics_process(delta: float):
+	if not is_on_floor():
+		velocity.y += gravity * delta
+
+	if is_dead:
+		velocity.x = 0
+		move_and_slide()
+		return
+
+	if is_attacking:
+		velocity.x = 0
+		move_and_slide()
+		return
+
+	if player != null and is_instance_valid(player):
+		var dx: float = player.global_position.x - global_position.x
+		var dy: float = abs(player.global_position.y - global_position.y)
+		var distance_x: float = abs(dx)
+
+		if dx != 0:
+			sprite.flip_h = dx < 0
+
+		if distance_x <= attack_range and dy <= attack_vertical_tolerance:
+			start_next_attack()
+		else:
+			var direction: float = sign(dx)
+			velocity.x = direction * speed
+			sprite.play("running")
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed)
+		sprite.play("idle")
+
+	move_and_slide()
+
+func start_next_attack():
+	is_attacking = true
+	has_dealt_damage = false
+	velocity.x = 0
+
+	var anim_name: String = attack_animations[current_attack_index]
+	current_attack_index = (current_attack_index + 1) % attack_animations.size()
+	
+	sprite.frame = 0
+	sprite.play(anim_name)
+
+func _on_sprite_frame_changed():
+	if is_attacking and not has_dealt_damage and not is_dead:
+		var total_frames: int = sprite.sprite_frames.get_frame_count(sprite.animation)
+		var impact_frame: int = int(total_frames / 2.0)
+		
+		if sprite.frame >= impact_frame:
+			try_deal_damage_to_player()
+
+func try_deal_damage_to_player():
+	if has_dealt_damage or player == null or not is_instance_valid(player):
+		return
+		
+	var distance_x: float = abs(player.global_position.x - global_position.x)
+	var dy: float = abs(player.global_position.y - global_position.y)
+	
+	if distance_x <= attack_range + 15.0 and dy <= attack_vertical_tolerance:
+		has_dealt_damage = true
+		if player.has_method("take_damage"):
+			player.take_damage(attack_damage)
+
+func take_damage(amount: int = 40):
+	if is_dead:
+		return
+		
+	health -= amount
+	if health <= 0:
+		die()
+
+func die():
+	is_dead = true
+	is_attacking = false
+	velocity = Vector2.ZERO
+	
+	body_collision.set_deferred("disabled", true)
+	detection_collision.set_deferred("disabled", true)
+	
+	sprite.frame = 0
+	sprite.play("dead")
+
+func _on_sprite_animation_finished():
+	if sprite.animation == "dead":
+		queue_free()
+	elif sprite.animation in attack_animations:
+		if not has_dealt_damage:
+			try_deal_damage_to_player()
+		is_attacking = false
+
+func _on_detection_area_body_entered(body: Node2D):
+	if body.name == "Player" or body.is_in_group("player"):
+		player = body as CharacterBody2D
+
+func _on_detection_area_body_exited(body: Node2D):
+	if body == player:
+		player = null
