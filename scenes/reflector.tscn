@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://45je0tetavkm"]
+
+[ext_resource type="Texture2D" uid="uid://cgo74in6cmjl1" path="res://assets/reflector/evilcorona_hit.png" id="1_6aek8"]
+[ext_resource type="Script" uid="uid://bsoy8vks3avbj" path="res://scripts/reflector.gd" id="1_j5us7"]
+[ext_resource type="Texture2D" uid="uid://di3es7sklnap1" path="res://assets/reflector/evilcorona_idle.png" id="1_o5bf0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w07tn"]
+atlas = ExtResource("1_6aek8")
+region = Rect2(0, 0, 63, 91)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_33ua8"]
+atlas = ExtResource("1_6aek8")
+region = Rect2(63, 0, 63, 91)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6aek8"]
+atlas = ExtResource("1_o5bf0")
+region = Rect2(0, 0, 63, 91)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5us7"]
+atlas = ExtResource("1_o5bf0")
+region = Rect2(63, 0, 63, 91)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rict0"]
+atlas = ExtResource("1_o5bf0")
+region = Rect2(126, 0, 63, 91)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_13olp"]
+atlas = ExtResource("1_o5bf0")
+region = Rect2(189, 0, 63, 91)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3nts2"]
+animations = [{
+"frames": [{
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_w07tn")
+}, {
+"duration": 0.6,
+"texture": SubResource("AtlasTexture_33ua8")
+}],
+"loop": 1,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.2,
+"texture": SubResource("AtlasTexture_6aek8")
+}, {
+"duration": 1.2,
+"texture": SubResource("AtlasTexture_j5us7")
+}, {
+"duration": 1.2,
+"texture": SubResource("AtlasTexture_rict0")
+}, {
+"duration": 1.2,
+"texture": SubResource("AtlasTexture_13olp")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mmtfi"]
+radius = 25.0
+height = 82.0
+
+[node name="Reflector" type="Area2D" unique_id=83100342]
+scale = Vector2(0.64000016, 0.64000016)
+script = ExtResource("1_j5us7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=628230686]
+sprite_frames = SubResource("SpriteFrames_3nts2")
+animation = &"hit"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2007263723]
+position = Vector2(-3, 3)
+shape = SubResource("CapsuleShape2D_mmtfi")

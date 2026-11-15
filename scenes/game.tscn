@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c4e2sqilnx6qs" path="res://scenes/Zombie Woman.tscn" id="6_gee14"]
 [ext_resource type="Texture2D" uid="uid://o47u762tw55e" path="res://assets/background/Grass_background_1.png" id="6_p57ef"]
 [ext_resource type="Texture2D" uid="uid://b4h8a1ehsqmb6" path="res://assets/background/Background_1.png" id="8_gee14"]
+[ext_resource type="PackedScene" uid="uid://45je0tetavkm" path="res://scenes/reflector.tscn" id="10_vtaks"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yqjtg"]
 texture = ExtResource("1_uwrxv")
@@ -916,7 +917,7 @@ scale = Vector2(0.5163933, 0.5163933)
 texture = ExtResource("8_gee14")
 centered = false
 region_enabled = true
-region_rect = Rect2(0, 0, 9999999, 450)
+region_rect = Rect2(0, 0, 9999, 450)
 
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="Background" unique_id=1864221694]
 motion_scale = Vector2(0.6, 1)
@@ -928,7 +929,7 @@ scale = Vector2(0.48000002, 0.48000002)
 texture = ExtResource("6_p57ef")
 centered = false
 region_enabled = true
-region_rect = Rect2(0, 0, 9999999, 450)
+region_rect = Rect2(0, 0, 9999, 450)
 
 [node name="Statue" parent="." unique_id=1411461505 instance=ExtResource("1_lnu2h")]
 z_index = 1
@@ -962,3 +963,8 @@ position = Vector2(62, 470)
 
 [node name="Zombie Man2" parent="Zombies" unique_id=1309065250 instance=ExtResource("6_gee14")]
 position = Vector2(915, 376.00003)
+
+[node name="Reflectors" type="Node2D" parent="." unique_id=1037717243]
+
+[node name="Reflector" parent="Reflectors" unique_id=83100342 instance=ExtResource("10_vtaks")]
+position = Vector2(224, 483)
