@@ -68,6 +68,7 @@ func _physics_process(delta: float):
 		else:
 			var direction: float = sign(dx)
 			velocity.x = direction * speed
+			velocity.y -= 5
 			sprite.play("running")
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
@@ -117,9 +118,9 @@ func take_damage(amount: int = 40):
 func die():
 	is_dead = true
 	is_attacking = false
-	velocity = Vector2.ZERO
+	velocity.x = 0
 	
-	body_collision.set_deferred("disabled", true)
+	collision_layer = 0
 	detection_collision.set_deferred("disabled", true)
 	
 	sprite.frame = 0

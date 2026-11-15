@@ -267,6 +267,7 @@ radius = 724.3977
 
 [node name="Wild Zombie" type="CharacterBody2D" unique_id=1117136050]
 scale = Vector2(1.3, 1.3)
+safe_margin = 0.001
 script = ExtResource("1_yjci6")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=786217424]

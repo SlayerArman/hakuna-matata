@@ -84,6 +84,7 @@
 [ext_resource type="Texture2D" uid="uid://drili18qrbgco" path="res://assets/player/animations/running/running leg/leg_run5.png" id="82_w5j5w"]
 [ext_resource type="Texture2D" uid="uid://bxlcrwffqhss0" path="res://assets/player/animations/running/running leg/leg_run6.png" id="83_cbf1i"]
 [ext_resource type="Texture2D" uid="uid://b42561rmuhbkq" path="res://assets/player/animations/running/running leg/leg_run7.png" id="84_4vfid"]
+[ext_resource type="PackedScene" uid="uid://cp0hbx3bpl7es" path="res://scenes/bullet.tscn" id="85_vx63k"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u8vuu"]
 animations = [{
@@ -449,22 +450,25 @@ animations = [{
 radius = 12.0
 height = 40.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1vivr"]
+radius = 22.0
+height = 44.0
+
 [node name="Player" type="CharacterBody2D" unique_id=1439198723]
 script = ExtResource("1_gl8cc")
+bullet_scene = ExtResource("85_vx63k")
 
 [node name="Upper Body" type="AnimatedSprite2D" parent="." unique_id=200663086]
 sprite_frames = SubResource("SpriteFrames_u8vuu")
-animation = &"meele"
+animation = &"idle"
 autoplay = "idle"
-frame = 8
-frame_progress = 0.19543771
+frame = 2
+frame_progress = 0.38068655
 
 [node name="Lower Body" type="AnimatedSprite2D" parent="." unique_id=1335888456]
 sprite_frames = SubResource("SpriteFrames_1vivr")
-animation = &"running"
+animation = &"idle"
 autoplay = "idle"
-frame = 3
-frame_progress = 0.7422619
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1357238239]
 position = Vector2(0, 5)
@@ -473,3 +477,20 @@ shape = SubResource("CapsuleShape2D_smehm")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=87298350]
 position = Vector2(2, -40)
 zoom = Vector2(2.5, 2.5)
+
+[node name="MuzzleNormal" type="Marker2D" parent="." unique_id=1036489549]
+position = Vector2(20, -8)
+
+[node name="MuzzleCrouch" type="Marker2D" parent="." unique_id=58349802]
+position = Vector2(22, 1)
+
+[node name="MuzzleUp" type="Marker2D" parent="." unique_id=226548641]
+position = Vector2(-3, -24)
+
+[node name="MeleeArea" type="Area2D" parent="." unique_id=767692712]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeArea" unique_id=277691361]
+position = Vector2(8, 3)
+shape = SubResource("CapsuleShape2D_1vivr")
+
+[node name="Bullet" parent="." unique_id=338217883 instance=ExtResource("85_vx63k")]
