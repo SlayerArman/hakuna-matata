@@ -1,15 +1,53 @@
 [gd_scene format=3 uid="uid://83138jmn2d2l"]
 
 [ext_resource type="Texture2D" uid="uid://b387a30lxo8bh" path="res://assets/intractables/Salt.png" id="1_j1qx7"]
+[ext_resource type="Script" uid="uid://dkc631qfu0l37" path="res://scripts/statue.gd" id="2_sxr8y"]
+[ext_resource type="FontFile" uid="uid://d0ttyhs5tc2b" path="res://assets/fonts/AncientModernTales-a7Po.ttf" id="3_6wwjp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j1qx7"]
 size = Vector2(137, 206)
 
+[sub_resource type="LabelSettings" id="LabelSettings_c6yg0"]
+font = ExtResource("3_6wwjp")
+font_size = 20
+outline_size = 1
+
 [node name="Statue" type="Sprite2D" unique_id=1411461505]
 texture = ExtResource("1_j1qx7")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1152507617]
+[node name="Area2D" type="Area2D" parent="." unique_id=1152507617 node_paths=PackedStringArray("end_overlay")]
+script = ExtResource("2_sxr8y")
+end_overlay = NodePath("../CanvasLayer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1681508285]
 position = Vector2(0.5, 13)
 shape = SubResource("RectangleShape2D_j1qx7")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1287182610]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=247511254]
+z_index = 10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.3372549)
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=712015266]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -639.0
+offset_top = 289.00006
+offset_right = -66.0
+offset_bottom = 312.00006
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.254653, 2.254653)
+text = "The Divine Blessings of the  GOD  Cured the  Virus  and the  World  was  Saved!"
+label_settings = SubResource("LabelSettings_c6yg0")
+horizontal_alignment = 1

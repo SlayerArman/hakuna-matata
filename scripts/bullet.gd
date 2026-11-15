@@ -6,9 +6,11 @@ extends Area2D
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
+@onready var shoot_sound: AudioStreamPlayer = $AudioStreamPlayer
 
 var direction: Vector2 = Vector2.RIGHT
 var has_hit: bool = false
+var anim_finished: bool = false
 var is_reflected: bool = false
 var last_reflector: Area2D = null
 var lifetime: float = 3.0
@@ -23,8 +25,11 @@ func _ready():
 
 	body_entered.connect(_on_body_entered)
 	sprite.animation_finished.connect(_on_sprite_animation_finished)
+	shoot_sound.finished.connect(_on_shoot_sound_finished)
 	
 	sprite.play("fly")
+	if shoot_sound.stream != null:
+		shoot_sound.play()
 
 func _physics_process(delta: float):
 	if not has_hit:
@@ -78,8 +83,20 @@ func trigger_hit(body: Node2D, dmg_amount: int):
 		sprite.frame = 0
 		sprite.play("hit")
 	else:
-		queue_free()
+		anim_finished = true
+		sprite.visible = false
+		try_cleanup()
 
 func _on_sprite_animation_finished():
 	if sprite.animation == "hit":
+		anim_finished = true
+		sprite.visible = false
+		try_cleanup()
+
+func _on_shoot_sound_finished():
+	if has_hit:
+		try_cleanup()
+
+func try_cleanup():
+	if has_hit and anim_finished and not shoot_sound.playing:
 		queue_free()

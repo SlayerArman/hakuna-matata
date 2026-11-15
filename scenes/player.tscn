@@ -460,10 +460,8 @@ bullet_scene = ExtResource("85_vx63k")
 
 [node name="Upper Body" type="AnimatedSprite2D" parent="." unique_id=200663086]
 sprite_frames = SubResource("SpriteFrames_u8vuu")
-animation = &"idle"
+animation = &"shoot"
 autoplay = "idle"
-frame = 2
-frame_progress = 0.38068655
 
 [node name="Lower Body" type="AnimatedSprite2D" parent="." unique_id=1335888456]
 sprite_frames = SubResource("SpriteFrames_1vivr")
@@ -475,7 +473,7 @@ position = Vector2(0, 5)
 shape = SubResource("CapsuleShape2D_smehm")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=87298350]
-position = Vector2(2, -40)
+position = Vector2(-28, -40)
 zoom = Vector2(2.5, 2.5)
 limit_left = -350
 limit_top = 225

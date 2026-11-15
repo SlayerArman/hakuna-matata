@@ -11,8 +11,10 @@ config_version=5
 [application]
 
 config/name="Hakuna Matata"
-run/main_scene="uid://nu1e3yifg212"
+run/main_scene="uid://nii2hcu77vm"
 config/features=PackedStringArray("4.7", "Mobile")
+boot_splash/image="uid://bcnmyf0sjyf12"
+config/icon="uid://crn7v6txdkk5s"
 
 [display]
 

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://2ab5rgxnpjrp" path="res://assets/player/bullet/bullet hit/hit3.png" id="4_1cfmv"]
 [ext_resource type="Texture2D" uid="uid://tqrbwn6pgojk" path="res://assets/player/bullet/bullet hit/hit4.png" id="5_k76ql"]
 [ext_resource type="Texture2D" uid="uid://bojwkw6qeu6wi" path="res://assets/player/bullet/bullet hit/hit5.png" id="6_in4mv"]
+[ext_resource type="AudioStream" uid="uid://boh71gplcmhr6" path="res://assets/sfx/pistol-shot.ogg" id="8_1cfmv"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_1vivr"]
 animations = [{
@@ -52,3 +53,7 @@ animation = &"hit"
 rotation = 1.5707964
 scale = Vector2(-0.24547182, -0.24547182)
 shape = SubResource("CapsuleShape2D_1vivr")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1800911336]
+stream = ExtResource("8_1cfmv")
+volume_db = 3.0

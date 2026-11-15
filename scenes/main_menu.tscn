@@ -1,3 +1,37 @@
 [gd_scene format=3 uid="uid://nii2hcu77vm"]
 
+[ext_resource type="Texture2D" uid="uid://bcnmyf0sjyf12" path="res://assets/background/main-menu bg.png" id="1_l6cm7"]
+[ext_resource type="FontFile" uid="uid://d0ttyhs5tc2b" path="res://assets/fonts/AncientModernTales-a7Po.ttf" id="2_ekxnf"]
+[ext_resource type="Script" uid="uid://dpi5bb2x1t87u" path="res://scripts/play.gd" id="3_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://cuqx2fmy4q111" path="res://assets/background/title.png" id="4_wu84c"]
+[ext_resource type="AudioStream" uid="uid://dp24lwdupsn2m" path="res://assets/sfx/music.ogg" id="5_8ln24"]
+
 [node name="Main Menu" type="Node2D" unique_id=2142600757]
+
+[node name="background" type="Sprite2D" parent="." unique_id=903579673]
+modulate = Color(0.45064795, 0.45064837, 0.45064813, 1)
+position = Vector2(730, 394)
+scale = Vector2(1.1135935, 1.1135935)
+texture = ExtResource("1_l6cm7")
+
+[node name="Play" type="Button" parent="." unique_id=1123202013]
+offset_left = 629.0
+offset_top = 611.0
+offset_right = 671.0
+offset_bottom = 637.0
+scale = Vector2(5.039998, 5.039998)
+theme_override_colors/font_pressed_color = Color(0.6075431, 0.07179812, 0, 1)
+theme_override_colors/font_hover_color = Color(0.7565614, 0.07091618, 0, 1)
+theme_override_fonts/font = ExtResource("2_ekxnf")
+text = "PLAY"
+flat = true
+script = ExtResource("3_bqqt6")
+
+[node name="Title" type="Sprite2D" parent="." unique_id=1794223702]
+position = Vector2(259, 127)
+texture = ExtResource("4_wu84c")
+
+[node name="music" type="AudioStreamPlayer" parent="." unique_id=1982164012]
+stream = ExtResource("5_8ln24")
+volume_db = 1.0
+autoplay = true
