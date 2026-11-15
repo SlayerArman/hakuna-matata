@@ -32,6 +32,18 @@
 [ext_resource type="Texture2D" uid="uid://bxlcrwffqhss0" path="res://assets/player/running/running leg/leg_run6.png" id="11_fulsm"]
 [ext_resource type="Texture2D" uid="uid://b42561rmuhbkq" path="res://assets/player/running/running leg/leg_run7.png" id="12_4r5pv"]
 [ext_resource type="Texture2D" uid="uid://brbeps66hbq0" path="res://assets/player/running/running full body/torso_run7.png" id="12_pf23h"]
+[ext_resource type="Texture2D" uid="uid://cloohonyumdks" path="res://assets/player/running/run end torso/torso_run_stop0.png" id="16_cs1tg"]
+[ext_resource type="Texture2D" uid="uid://06lqbeqvmvm7" path="res://assets/player/looks/look up/loop_up0.png" id="16_hhpqf"]
+[ext_resource type="Texture2D" uid="uid://c40e5f8bp6pq4" path="res://assets/player/running/run start torso/torso_run_start0.png" id="16_md1ol"]
+[ext_resource type="Texture2D" uid="uid://eu03w35kh2m0" path="res://assets/player/running/run end torso/torso_run_stop.png" id="17_2dvfe"]
+[ext_resource type="Texture2D" uid="uid://v8ovx4ag712k" path="res://assets/player/running/run start torso/torso_run_start1.png" id="17_bj30b"]
+[ext_resource type="Texture2D" uid="uid://cxr2fe8orf15q" path="res://assets/player/looks/look up/loop_up1.png" id="17_g5jhy"]
+[ext_resource type="Texture2D" uid="uid://c7g815wn3j28b" path="res://assets/player/looks/look up/loop_up2.png" id="18_holxr"]
+[ext_resource type="Texture2D" uid="uid://ygqcglaj0qfn" path="res://assets/player/looks/look up/loop_up3.png" id="19_mx1m4"]
+[ext_resource type="Texture2D" uid="uid://dyx4btidadi17" path="res://assets/player/running/run start leg/leg_run_start0.png" id="27_jc3p3"]
+[ext_resource type="Texture2D" uid="uid://b7pollg7bcmjk" path="res://assets/player/running/run end leg/leg_run_end0.png" id="27_t4otl"]
+[ext_resource type="Texture2D" uid="uid://csefxhky5wrl3" path="res://assets/player/running/run start leg/leg_run_start1.png" id="28_hax0n"]
+[ext_resource type="Texture2D" uid="uid://o53dc1wm13wl" path="res://assets/player/running/run end leg/leg_run_end1.png" id="28_j2b1d"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u8vuu"]
 animations = [{
@@ -93,6 +105,45 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_hhpqf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_g5jhy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_holxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_mx1m4")
+}],
+"loop": 1,
+"name": &"look up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_cs1tg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_2dvfe")
+}],
+"loop": 1,
+"name": &"run end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_md1ol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_bj30b")
+}],
+"loop": 1,
+"name": &"run start",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 0.4,
 "texture": ExtResource("5_i4ail")
 }, {
@@ -133,6 +184,28 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_t4otl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_j2b1d")
+}],
+"loop": 1,
+"name": &"run end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_jc3p3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_hax0n")
+}],
+"loop": 1,
+"name": &"run start",
+"speed": 5.0
+}, {
+"frames": [{
 "duration": 0.4,
 "texture": ExtResource("5_3v2ag")
 }, {
@@ -170,7 +243,7 @@ script = ExtResource("1_gl8cc")
 
 [node name="Upper Body" type="AnimatedSprite2D" parent="." unique_id=200663086]
 sprite_frames = SubResource("SpriteFrames_u8vuu")
-animation = &"idle"
+animation = &"look up"
 autoplay = "idle"
 
 [node name="Lower Body" type="AnimatedSprite2D" parent="." unique_id=1335888456]
