@@ -454,6 +454,18 @@ height = 40.0
 radius = 22.0
 height = 44.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vx63k"]
+bg_color = Color(0.16924527, 0.16924533, 0.16924518, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lw0jh"]
+bg_color = Color(0.74683565, 0, 0.1309456, 1)
+
 [node name="Player" type="CharacterBody2D" unique_id=1439198723]
 script = ExtResource("1_gl8cc")
 bullet_scene = ExtResource("85_vx63k")
@@ -496,3 +508,15 @@ position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_1vivr")
 
 [node name="Bullet" parent="." unique_id=338217883 instance=ExtResource("85_vx63k")]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=2080647316]
+
+[node name="HealthBar" type="ProgressBar" parent="HUD" unique_id=1424006805]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 42.0
+theme_override_styles/background = SubResource("StyleBoxFlat_vx63k")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lw0jh")
+value = 100.0
+show_percentage = false

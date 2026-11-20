@@ -4,8 +4,11 @@ const SPEED = 250.0
 const CROUCH_SPEED = 110.0
 const JUMP_VELOCITY = -400.0
 
-@export var bullet_scene: PackedScene
 @export var max_health: int = 100
+@onready var health_bar: ProgressBar = get_node_or_null("HUD/HealthBar")
+@onready var health_label: Label = get_node_or_null("HUD/HealthBar/HealthLabel")
+
+@export var bullet_scene: PackedScene
 @export var melee_damage: int = 100
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -28,6 +31,7 @@ var player_flash_material: ShaderMaterial
 var default_melee_x: float = 0.0
 var default_melee_child_x: Dictionary = {}
 
+var is_dead: bool = false
 var is_running = false
 var run_transition = ""
 
@@ -48,6 +52,10 @@ func _ready():
 	setup_player_hit_flash()
 	
 	health = max_health
+	if health_bar != null:
+		health_bar.max_value = max_health
+		health_bar.value = health
+	update_health_ui(true)
 	
 	if melee_area != null:
 		default_melee_x = melee_area.position.x
@@ -79,6 +87,13 @@ func _ready():
 	upper_body.frame_changed.connect(_on_upper_body_frame_changed)
 
 func _physics_process(delta):
+	if is_dead:
+		velocity.x = 0
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		move_and_slide()
+		return
+		
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
@@ -487,10 +502,34 @@ func update_collision(is_crouching):
 		collision.position.y = default_position.y
 
 func take_damage(amount: int):
-	trigger_player_hit_haptics(amount)
-	health = max(health - amount, 0)
 	if health <= 0:
-		get_tree().reload_current_scene()
+		return
+	
+	health = clamp(health - amount, 0, max_health)
+	trigger_player_hit_haptics(amount)
+	update_health_ui()
+	
+	if health <= 0:
+		die()
+
+func die():
+	if is_dead:
+		return
+	is_dead = true
+	is_shooting = false
+	is_meleeing = false
+	velocity.x = 0
+
+	if upper_body.sprite_frames.has_animation("dead"):
+		lower_body.visible = false
+		upper_body.sprite_frames.set_animation_loop("dead", false)
+		upper_body.frame = 0
+		upper_body.play("dead")
+		await upper_body.animation_finished
+	else:
+		await get_tree().create_timer(0.45).timeout
+
+	get_tree().reload_current_scene()
 
 func setup_player_hit_flash():
 	var shader := Shader.new()
@@ -563,3 +602,14 @@ func spawn_player_damage_number(amount: int, color: Color):
 	tween.tween_property(label, "global_position:y", start_pos.y - 26.0, 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(label, "modulate:a", 0.0, 0.55).set_delay(0.15)
 	tween.chain().tween_callback(label.queue_free)
+
+func update_health_ui(instant: bool = false):
+	if health_bar != null:
+		if instant:
+			health_bar.value = health
+		else:
+			var tween := create_tween()
+			tween.tween_property(health_bar, "value", health, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	if health_label != null:
+		health_label.text = str(health) + " / " + str(max_health)
