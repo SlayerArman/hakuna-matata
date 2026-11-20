@@ -13,8 +13,12 @@ config_version=5
 config/name="Hakuna Matata"
 run/main_scene="uid://nii2hcu77vm"
 config/features=PackedStringArray("4.7", "Mobile")
-boot_splash/image="uid://bcnmyf0sjyf12"
+boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="uid://crn7v6txdkk5s"
+
+[autoload]
+
+CursorTrail="*uid://b3ivkr0u30v8l"
 
 [display]
 
@@ -23,6 +27,7 @@ window/size/viewport_height=720
 window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+mouse_cursor/custom_image="uid://dibxu1ngio0ca"
 
 [editor_plugins]
 

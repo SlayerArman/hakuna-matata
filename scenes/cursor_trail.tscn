@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://b3ivkr0u30v8l"]
+
+[ext_resource type="Script" uid="uid://c4i8rnkss70rn" path="res://scripts/cursor_trail.gd" id="1_1rfam"]
+[ext_resource type="Texture2D" uid="uid://duyl37w8r7ip6" path="res://assets/player/bullet/bullet hit/hit2.png" id="1_2bjmg"]
+
+[sub_resource type="Curve" id="Curve_2bjmg"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[node name="CursorTrail" type="CanvasLayer" unique_id=1707522430]
+script = ExtResource("1_1rfam")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=16996519]
+amount = 25
+texture = ExtResource("1_2bjmg")
+lifetime = 0.35000000000000003
+spread = 180.0
+gravity = Vector2(0, 40)
+initial_velocity_min = 10.0
+initial_velocity_max = 25.0
+scale_amount_min = 3.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_2bjmg")

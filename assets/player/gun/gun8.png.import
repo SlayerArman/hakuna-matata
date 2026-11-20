@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu1lccdubai47"
-path="res://.godot/imported/gun2.png-493f89a805433a4f177ba20ab15b127c.ctex"
+uid="uid://osb2xdcxbds2"
+path="res://.godot/imported/gun8.png-c06af0d7633bec2aca27f54a6a6dca72.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/player/bullet/gun/gun2.png"
-dest_files=["res://.godot/imported/gun2.png-493f89a805433a4f177ba20ab15b127c.ctex"]
+source_file="res://assets/player/gun/gun8.png"
+dest_files=["res://.godot/imported/gun8.png-c06af0d7633bec2aca27f54a6a6dca72.ctex"]
 
 [params]
 

@@ -23,6 +23,8 @@ var health: int = max_health
 @onready var default_shape_height = collision.shape.height
 @onready var default_position = collision.position
 
+var player_flash_material: ShaderMaterial
+
 var default_melee_x: float = 0.0
 var default_melee_child_x: Dictionary = {}
 
@@ -43,6 +45,8 @@ var is_meleeing = false
 var melee_hit_targets: Array[Node2D] = []
 
 func _ready():
+	setup_player_hit_flash()
+	
 	health = max_health
 	
 	if melee_area != null:
@@ -483,6 +487,79 @@ func update_collision(is_crouching):
 		collision.position.y = default_position.y
 
 func take_damage(amount: int):
+	trigger_player_hit_haptics(amount)
 	health = max(health - amount, 0)
 	if health <= 0:
 		get_tree().reload_current_scene()
+
+func setup_player_hit_flash():
+	var shader := Shader.new()
+	shader.code = """
+		shader_type canvas_item;
+		uniform vec4 flash_color : source_color = vec4(1.0, 0.15, 0.15, 1.0);
+		uniform float flash_amount : hint_range(0.0, 1.0) = 0.0;
+
+		void fragment() {
+			vec4 tex_color = texture(TEXTURE, UV);
+			COLOR = mix(tex_color, vec4(flash_color.rgb, tex_color.a), flash_amount);
+		}
+	"""
+	player_flash_material = ShaderMaterial.new()
+	player_flash_material.shader = shader
+	
+	for child in get_children():
+		if child is AnimatedSprite2D:
+			child.material = player_flash_material
+
+func trigger_player_hit_haptics(amount: int = 30):
+	var hit_color := Color(1.0, 0.12, 0.12, 1.0)
+
+	if player_flash_material != null:
+		player_flash_material.set_shader_parameter("flash_color", hit_color)
+		var tween := create_tween()
+		tween.tween_method(
+			func(val: float): player_flash_material.set_shader_parameter("flash_amount", val),
+			0.85,
+			0.0,
+			0.15
+		)
+
+	var sparks := CPUParticles2D.new()
+	sparks.global_position = global_position + Vector2(0, -14)
+	sparks.emitting = true
+	sparks.one_shot = true
+	sparks.explosiveness = 1.0
+	sparks.amount = 12
+	sparks.lifetime = 0.24
+	sparks.spread = 180.0
+	sparks.initial_velocity_min = 80.0
+	sparks.initial_velocity_max = 160.0
+	sparks.gravity = Vector2(0, 300)
+	sparks.scale_amount_min = 1.2
+	sparks.scale_amount_max = 2.2
+	sparks.color = hit_color
+	get_parent().add_child(sparks)
+	get_tree().create_timer(0.3).timeout.connect(sparks.queue_free)
+
+	spawn_player_damage_number(amount, hit_color)
+
+func spawn_player_damage_number(amount: int, color: Color):
+	var label := Label.new()
+	label.text = "-" + str(amount)
+	label.z_index = 50
+	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 4)
+
+	var start_pos := global_position + Vector2(randf_range(-10.0, 6.0), -34.0)
+	label.global_position = start_pos
+	get_parent().add_child(label)
+
+	var tween := label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "global_position:y", start_pos.y - 26.0, 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(label, "modulate:a", 0.0, 0.55).set_delay(0.15)
+	tween.chain().tween_callback(label.queue_free)
