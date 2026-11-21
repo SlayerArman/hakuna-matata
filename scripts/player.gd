@@ -8,11 +8,25 @@ const JUMP_VELOCITY = -400.0
 @onready var health_bar: ProgressBar = get_node_or_null("HUD/HealthBar")
 @onready var health_label: Label = get_node_or_null("HUD/HealthBar/HealthLabel")
 
+@export var weapons: Array[WeaponData] = []
 @export var bullet_scene: PackedScene
 @export var melee_damage: int = 100
+@export var default_mag_size: int = 7
+@export var default_reserve_ammo: int = 28
+@export var default_reload_time: float = 0.8
+@export var magazine_full_at_frame_zero: bool = true
+@export var auto_reload_when_empty: bool = false
+
+@onready var magazine_sprite: AnimatedSprite2D = get_node_or_null("HUD/MagazineSprite")
+@onready var ammo_label: Label = get_node_or_null("HUD/AmmoLabel")
+
+var current_weapon_index: int = 0
+var weapon_states: Array[Dictionary] = []
+var is_reloading: bool = false
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var health: int = max_health
+var is_dead: bool = false
 
 @onready var upper_body = $"Upper Body"
 @onready var lower_body = $"Lower Body"
@@ -31,7 +45,6 @@ var player_flash_material: ShaderMaterial
 var default_melee_x: float = 0.0
 var default_melee_child_x: Dictionary = {}
 
-var is_dead: bool = false
 var is_running = false
 var run_transition = ""
 
@@ -50,6 +63,7 @@ var melee_hit_targets: Array[Node2D] = []
 
 func _ready():
 	setup_player_hit_flash()
+	init_weapons()
 	
 	health = max_health
 	if health_bar != null:
@@ -86,6 +100,122 @@ func _ready():
 	upper_body.animation_finished.connect(_on_upper_body_animation_finished)
 	upper_body.frame_changed.connect(_on_upper_body_frame_changed)
 
+func init_weapons():
+	weapon_states.clear()
+	
+	if weapons.is_empty():
+		var fallback := WeaponData.new()
+		fallback.weapon_name = "Pistol"
+		fallback.bullet_scene = bullet_scene
+		fallback.damage = 40
+		fallback.magazine_size = default_mag_size
+		fallback.starting_reserve_ammo = default_reserve_ammo
+		fallback.max_reserve_ammo = default_reserve_ammo * 3
+		fallback.reload_time = default_reload_time
+		fallback.magazine_full_at_frame_zero = magazine_full_at_frame_zero
+		if magazine_sprite != null:
+			fallback.magazine_sprite_frames = magazine_sprite.sprite_frames
+		weapons.append(fallback)
+	
+	for w in weapons:
+		weapon_states.append({
+			"mag": w.magazine_size,
+			"reserve": w.starting_reserve_ammo
+		})
+		
+	equip_weapon(0)
+
+func equip_weapon(index: int):
+	if index < 0 or index >= weapons.size():
+		return
+	current_weapon_index = index
+	is_reloading = false
+	is_shooting = false
+	has_queued_shot = false
+	active_shot = ""
+	
+	var w: WeaponData = weapons[current_weapon_index]
+	if magazine_sprite != null and w.magazine_sprite_frames != null:
+		magazine_sprite.sprite_frames = w.magazine_sprite_frames
+	update_ammo_ui()
+
+func get_current_weapon() -> WeaponData:
+	return weapons[current_weapon_index]
+
+func get_current_mag() -> int:
+	return weapon_states[current_weapon_index]["mag"]
+
+func get_current_reserve() -> int:
+	return weapon_states[current_weapon_index]["reserve"]
+
+func can_shoot() -> bool:
+	return not is_reloading and get_current_mag() > 0
+
+func start_reload():
+	if is_reloading or is_dead:
+		return
+	var w: WeaponData = get_current_weapon()
+	var current_mag: int = get_current_mag()
+	var current_reserve: int = get_current_reserve()
+	
+	if current_mag >= w.magazine_size or current_reserve <= 0:
+		return
+		
+	is_reloading = true
+	is_shooting = false
+	has_queued_shot = false
+	active_shot = ""
+	is_shooting_up = false
+	shoot_up_transition = ""
+	
+	if ammo_label != null:
+		ammo_label.text = "RELOADING..."
+		
+	await get_tree().create_timer(w.reload_time).timeout
+	
+	if is_dead or not is_reloading:
+		return
+		
+	var needed: int = w.magazine_size - weapon_states[current_weapon_index]["mag"]
+	var to_load: int = mini(needed, weapon_states[current_weapon_index]["reserve"])
+	
+	weapon_states[current_weapon_index]["mag"] += to_load
+	weapon_states[current_weapon_index]["reserve"] -= to_load
+	is_reloading = false
+	update_ammo_ui()
+
+func add_ammo(amount: int, weapon_index: int = -1):
+	var idx: int = current_weapon_index if weapon_index == -1 else weapon_index
+	if idx < 0 or idx >= weapons.size():
+		return
+	var w: WeaponData = weapons[idx]
+	weapon_states[idx]["reserve"] = clampi(weapon_states[idx]["reserve"] + amount, 0, w.max_reserve_ammo)
+	if idx == current_weapon_index:
+		update_ammo_ui()
+
+func update_ammo_ui():
+	var w: WeaponData = get_current_weapon()
+	var current_mag: int = get_current_mag()
+	var current_reserve: int = get_current_reserve()
+	
+	if ammo_label != null and not is_reloading:
+		ammo_label.text = str(current_mag) + " / " + str(current_reserve)
+		
+	if magazine_sprite != null and magazine_sprite.sprite_frames != null:
+		var anim_name: String = "default"
+		if not magazine_sprite.sprite_frames.has_animation(anim_name):
+			var names := magazine_sprite.sprite_frames.get_animation_names()
+			if names.size() > 0:
+				anim_name = names[0]
+				
+		if magazine_sprite.sprite_frames.has_animation(anim_name):
+			magazine_sprite.animation = anim_name
+			magazine_sprite.stop()
+			var total_frames: int = magazine_sprite.sprite_frames.get_frame_count(anim_name)
+			if total_frames > 0 and w.magazine_size > 0:
+				var ratio: float = float(w.magazine_size - current_mag) / float(w.magazine_size) if w.magazine_full_at_frame_zero else float(current_mag) / float(w.magazine_size)
+				magazine_sprite.frame = clampi(roundi(ratio * float(total_frames - 1)), 0, total_frames - 1)
+
 func _physics_process(delta):
 	if is_dead:
 		velocity.x = 0
@@ -93,9 +223,12 @@ func _physics_process(delta):
 			velocity.y += gravity * delta
 		move_and_slide()
 		return
-		
+
 	if not is_on_floor():
 		velocity.y += gravity * delta
+
+	if Input.is_action_just_pressed("reload") and not is_reloading and not is_meleeing:
+		start_reload()
 
 	if Input.is_action_just_pressed("meele") and not is_meleeing:
 		is_meleeing = true
@@ -124,11 +257,14 @@ func _physics_process(delta):
 		is_crouching = Input.is_action_pressed("crouch") and is_on_floor()
 		var current_speed = CROUCH_SPEED if is_crouching else SPEED
 
-		if Input.is_action_just_pressed("shoot"):
-			if not is_shooting:
-				start_new_shot(is_crouching, Input.is_action_pressed("look up"))
-			else:
-				has_queued_shot = true
+		if Input.is_action_just_pressed("shoot") and not is_reloading:
+			if can_shoot():
+				if not is_shooting:
+					start_new_shot(is_crouching, Input.is_action_pressed("look up"))
+				else:
+					has_queued_shot = true
+			elif auto_reload_when_empty and get_current_reserve() > 0:
+				start_reload()
 
 		direction = Input.get_axis("move_left", "move_right")
 		
@@ -164,6 +300,9 @@ func update_melee_hitbox_direction(is_facing_left: bool):
 			child.position.x = default_melee_child_x[child] * sign_mult
 
 func start_new_shot(is_crouching: bool, is_looking_up: bool):
+	if not can_shoot():
+		return
+
 	is_shooting = true
 	has_queued_shot = false
 	
@@ -191,11 +330,24 @@ func start_new_shot(is_crouching: bool, is_looking_up: bool):
 		spawn_bullet("shoot")
 
 func spawn_bullet(shot_type: String):
-	if bullet_scene == null:
-		push_warning("Bullet Scene is not assigned on Player in the Inspector!")
+	if not can_shoot():
+		is_shooting = false
+		active_shot = ""
 		return
 
-	var bullet = bullet_scene.instantiate()
+	var w: WeaponData = get_current_weapon()
+	var active_bullet_scene: PackedScene = w.bullet_scene if w.bullet_scene != null else bullet_scene
+	if active_bullet_scene == null:
+		push_warning("Bullet Scene is not assigned on Player or WeaponData in the Inspector!")
+		return
+
+	weapon_states[current_weapon_index]["mag"] -= 1
+	update_ammo_ui()
+
+	var bullet = active_bullet_scene.instantiate()
+	if "damage" in bullet:
+		bullet.damage = w.damage
+
 	var selected_marker: Marker2D = muzzle_normal
 	var shoot_dir: Vector2 = Vector2.LEFT if upper_body.flip_h else Vector2.RIGHT
 
@@ -220,6 +372,11 @@ func spawn_bullet(shot_type: String):
 		bullet.global_position = global_position
 
 	get_tree().current_scene.add_child(bullet)
+
+	if get_current_mag() <= 0 and auto_reload_when_empty and get_current_reserve() > 0:
+		is_shooting = false
+		active_shot = ""
+		start_reload()
 
 func update_animations(direction, is_crouching):
 	var is_looking_up = Input.is_action_pressed("look up")
@@ -427,7 +584,7 @@ func _on_upper_body_animation_finished():
 				shoot_up_transition = ""
 		"shoot":
 			if is_shooting and active_shot == "shoot":
-				if Input.is_action_pressed("shoot") or has_queued_shot:
+				if (Input.is_action_pressed("shoot") or has_queued_shot) and can_shoot():
 					has_queued_shot = false
 					if Input.is_action_pressed("crouch") and is_on_floor():
 						active_shot = "crouch shoot"
@@ -444,9 +601,10 @@ func _on_upper_body_animation_finished():
 				else:
 					is_shooting = false
 					active_shot = ""
+					has_queued_shot = false
 		"shoot up":
 			if is_shooting and active_shot == "shoot up":
-				if Input.is_action_pressed("shoot") or has_queued_shot:
+				if (Input.is_action_pressed("shoot") or has_queued_shot) and can_shoot():
 					has_queued_shot = false
 					if Input.is_action_pressed("crouch") and is_on_floor():
 						active_shot = "crouch shoot"
@@ -466,12 +624,13 @@ func _on_upper_body_animation_finished():
 				else:
 					is_shooting = false
 					active_shot = ""
+					has_queued_shot = false
 					is_shooting_up = false
 					shoot_up_transition = "end"
 					upper_body.frame = 0
 		"crouch shoot":
 			if is_shooting and active_shot == "crouch shoot":
-				if Input.is_action_pressed("shoot") or has_queued_shot:
+				if (Input.is_action_pressed("shoot") or has_queued_shot) and can_shoot():
 					has_queued_shot = false
 					if not (Input.is_action_pressed("crouch") and is_on_floor()):
 						if Input.is_action_pressed("look up"):
@@ -489,6 +648,7 @@ func _on_upper_body_animation_finished():
 				else:
 					is_shooting = false
 					active_shot = ""
+					has_queued_shot = false
 
 func update_collision(is_crouching):
 	if is_crouching:
@@ -502,7 +662,7 @@ func update_collision(is_crouching):
 		collision.position.y = default_position.y
 
 func take_damage(amount: int):
-	if health <= 0:
+	if health <= 0 or is_dead:
 		return
 	
 	health = clamp(health - amount, 0, max_health)
@@ -518,6 +678,7 @@ func die():
 	is_dead = true
 	is_shooting = false
 	is_meleeing = false
+	is_reloading = false
 	velocity.x = 0
 
 	if upper_body.sprite_frames.has_animation("dead"):

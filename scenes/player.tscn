@@ -85,6 +85,14 @@
 [ext_resource type="Texture2D" uid="uid://bxlcrwffqhss0" path="res://assets/player/animations/running/running leg/leg_run6.png" id="83_cbf1i"]
 [ext_resource type="Texture2D" uid="uid://b42561rmuhbkq" path="res://assets/player/animations/running/running leg/leg_run7.png" id="84_4vfid"]
 [ext_resource type="PackedScene" uid="uid://cp0hbx3bpl7es" path="res://scenes/bullet.tscn" id="85_vx63k"]
+[ext_resource type="Texture2D" uid="uid://blloj0arhj7pr" path="res://assets/ui/skulls.png" id="86_lw0jh"]
+[ext_resource type="Texture2D" uid="uid://c6brtt1yym6sw" path="res://assets/ui/ammo/pistol/7.png" id="87_fr8ja"]
+[ext_resource type="Texture2D" uid="uid://pcpph8sd56rk" path="res://assets/ui/ammo/pistol/6.png" id="88_gvmy4"]
+[ext_resource type="Texture2D" uid="uid://xqi6pl0bv2h0" path="res://assets/ui/ammo/pistol/5.png" id="89_fcu33"]
+[ext_resource type="Texture2D" uid="uid://ccognarji7802" path="res://assets/ui/ammo/pistol/4.png" id="90_qmsq4"]
+[ext_resource type="Texture2D" uid="uid://b2f80c7gj5olm" path="res://assets/ui/ammo/pistol/3.png" id="91_5vs2b"]
+[ext_resource type="Texture2D" uid="uid://nxyk02mopfpe" path="res://assets/ui/ammo/pistol/1.png" id="92_a7i4v"]
+[ext_resource type="Texture2D" uid="uid://b3m8cu56bihko" path="res://assets/ui/ammo/pistol/2.png" id="93_b5l0c"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u8vuu"]
 animations = [{
@@ -466,6 +474,35 @@ border_blend = true
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lw0jh"]
 bg_color = Color(0.74683565, 0, 0.1309456, 1)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_lw0jh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("87_fr8ja")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_gvmy4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_fcu33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_qmsq4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_5vs2b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_b5l0c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_a7i4v")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Player" type="CharacterBody2D" unique_id=1439198723]
 script = ExtResource("1_gl8cc")
 bullet_scene = ExtResource("85_vx63k")
@@ -512,11 +549,29 @@ shape = SubResource("CapsuleShape2D_1vivr")
 [node name="HUD" type="CanvasLayer" parent="." unique_id=2080647316]
 
 [node name="HealthBar" type="ProgressBar" parent="HUD" unique_id=1424006805]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 220.0
-offset_bottom = 42.0
+offset_left = 16.0
+offset_top = 685.0
+offset_right = 197.81818
+offset_bottom = 705.0
 theme_override_styles/background = SubResource("StyleBoxFlat_vx63k")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lw0jh")
 value = 100.0
 show_percentage = false
+
+[node name="Sprite2D" type="Sprite2D" parent="HUD/HealthBar" unique_id=1135898772]
+position = Vector2(87, 6.999999)
+scale = Vector2(2.4385908, 1.8345586)
+texture = ExtResource("86_lw0jh")
+
+[node name="MagazineSprite" type="AnimatedSprite2D" parent="HUD" unique_id=1119477623]
+position = Vector2(44.000004, 657.00006)
+scale = Vector2(1.8800018, 1.8800018)
+sprite_frames = SubResource("SpriteFrames_lw0jh")
+
+[node name="AmmoLabel" type="Label" parent="HUD" unique_id=1741953715]
+offset_left = 12.0
+offset_top = 617.0
+offset_right = 55.0
+offset_bottom = 640.0
+scale = Vector2(0.98710304, 1)
+text = "7 / 28"

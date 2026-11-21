@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bg38720s4oesq"
-path="res://.godot/imported/cursor.png-895db277840dc8fc472a0609c59e0cfa.ctex"
+uid="uid://blloj0arhj7pr"
+path="res://.godot/imported/skulls.png-ca59937b29744df712c36201b911a581.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/background/cursor.png"
-dest_files=["res://.godot/imported/cursor.png-895db277840dc8fc472a0609c59e0cfa.ctex"]
+source_file="res://assets/ui/skulls.png"
+dest_files=["res://.godot/imported/skulls.png-ca59937b29744df712c36201b911a581.ctex"]
 
 [params]
 

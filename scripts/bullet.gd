@@ -1,8 +1,8 @@
 extends Area2D
 
 @export var speed: float = 650.0
-@export var damage: int = 40
-@export var reflected_damage: int = 30
+@export var damage: int = 25
+@export var reflected_damage: int = 25
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
