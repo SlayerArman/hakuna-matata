@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b6ky4s1fjjejr" path="res://assets/player/animations/idle/crouch idle/crouch_idle1.png" id="2_ujl30"]
 [ext_resource type="Texture2D" uid="uid://3rp3tlrmd7ph" path="res://assets/player/animations/idle/crouch idle/crouch_idle2.png" id="3_31cv2"]
 [ext_resource type="Texture2D" uid="uid://dwt0q1wacj5ma" path="res://assets/player/animations/idle/idle torso/torso_idle2.png" id="3_f1ej7"]
+[ext_resource type="PackedScene" uid="uid://bpw6l061ldtj1" path="res://scenes/grenade.tscn" id="3_gvmy4"]
 [ext_resource type="Texture2D" uid="uid://c3xdpt5wemr57" path="res://assets/player/animations/idle/idle torso/torso_idle3.png" id="4_oprun"]
 [ext_resource type="Texture2D" uid="uid://cprwhdwe0uxlr" path="res://assets/player/animations/idle/crouch idle/crouch_idle3.png" id="4_pf23h"]
 [ext_resource type="Texture2D" uid="uid://51wtrrdt8ugl" path="res://assets/player/animations/running/running full body/torso_run0.png" id="5_i4ail"]
@@ -506,6 +507,7 @@ animations = [{
 [node name="Player" type="CharacterBody2D" unique_id=1439198723]
 script = ExtResource("1_gl8cc")
 bullet_scene = ExtResource("85_vx63k")
+grenade_scene = ExtResource("3_gvmy4")
 
 [node name="Upper Body" type="AnimatedSprite2D" parent="." unique_id=200663086]
 sprite_frames = SubResource("SpriteFrames_u8vuu")

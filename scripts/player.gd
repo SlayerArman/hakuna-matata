@@ -28,6 +28,10 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var health: int = max_health
 var is_dead: bool = false
 
+@export var grenade_scene: PackedScene
+@export var grenade_cooldown: float = 0.6
+var can_throw_grenade: bool = true
+
 @onready var upper_body = $"Upper Body"
 @onready var lower_body = $"Lower Body"
 @onready var collision = $CollisionShape2D
@@ -224,6 +228,9 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
+	if Input.is_action_just_pressed("grenade") and can_throw_grenade and not is_meleeing:
+		throw_grenade()
+
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
@@ -265,7 +272,7 @@ func _physics_process(delta):
 					has_queued_shot = true
 			elif auto_reload_when_empty and get_current_reserve() > 0:
 				start_reload()
-
+	
 		direction = Input.get_axis("move_left", "move_right")
 		
 		if direction:
@@ -774,3 +781,22 @@ func update_health_ui(instant: bool = false):
 
 	if health_label != null:
 		health_label.text = str(health) + " / " + str(max_health)
+
+func throw_grenade():
+	if grenade_scene == null:
+		push_warning("Grenade Scene is not assigned on Player in the Inspector!")
+		return
+
+	can_throw_grenade = false
+
+	var grenade := grenade_scene.instantiate() as RigidBody2D
+	var facing_dir: float = -1.0 if upper_body.flip_h else 1.0
+
+	grenade.global_position = global_position + Vector2(14.0 * facing_dir, -14.0)
+	grenade.add_collision_exception_with(self)
+
+	get_tree().current_scene.add_child(grenade)
+	if grenade.has_method("launch"):
+		grenade.launch(facing_dir)
+
+	get_tree().create_timer(grenade_cooldown).timeout.connect(func(): can_throw_grenade = true)
