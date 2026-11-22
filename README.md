@@ -8,14 +8,14 @@ Stay alive and make it to the end of the map.
 
 ## Controls
 
-Move Left / Right: A / D or Left / Right Arrow
-Jump: Space
-Crouch: S or Down Arrow
-Aim Up: W or Up Arrow
-Shoot: Left Click
-Melee Attack: Right Click
-Reload: R
-Throw Grenade: F
+- Move Left / Right: A / D or Left / Right Arrow
+- Jump: Space
+- Crouch: S or Down Arrow
+- Aim Up: W or Up Arrow
+- Shoot: Left Click
+- Melee Attack: Right Click
+- Reload: R
+- Throw Grenade: F
 
 ## Screenshots
 <img width="952" height="530" alt="Screenshot 2026-11-22 215551" src="https://github.com/user-attachments/assets/8df3e768-eb6b-41db-b642-fc10c7049bde" />
